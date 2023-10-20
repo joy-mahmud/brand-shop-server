@@ -25,16 +25,55 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    
     await client.connect();
+     const brand = client.db('brandShop').collection('brands')
+     const productCollection = client.db('brandShop').collection('allProducts')
+     const productDetailsCollection = client.db('brandShop').collection('productDetails')
+   //get brand name and image
+    app.get('/brand', async(req,res)=>{
+        const cursor = brand.find()
+        const result = await cursor.toArray() 
+        res.send(result)
+    })
+    //get request for finding a specific brand products
+    app.get('/brand/:name', async(req,res)=>{
+        const brandName = req.params.name.toString()
+        // const 
+        // const brnadNameLowerCase = 
+        //const query = productCollection.brand === brandName
+        const filter = {brand:brandName}
+        const cursor = productCollection.find(filter)
+        const result = await cursor.toArray()
+        res.send(result)
+    })
+    
+    //post request to add new products
+    app.post('/products', async(req,res)=>{
+        const result = await productCollection.insertOne(req.body)
+        res.send(result)
+
+    })
+    //product details post
+    app.post('/details',async(req,res)=>{
+        const result = await productDetailsCollection.insertOne(req.body)
+        res.send(result)
+    })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    //await client.close();
   }
 }
 run().catch(console.dir);
+
+app.get('/', (req,res)=>{
+    res.send('Brand shop server is running')
+})
+
+app.listen(port,()=>{
+    console.log(`app is running on port ${port}`)
+})
 
 
