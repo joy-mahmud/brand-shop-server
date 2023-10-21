@@ -39,9 +39,7 @@ async function run() {
     //get request for finding a specific brand products
     app.get('/brand/:name', async(req,res)=>{
         const brandName = req.params.name.toString()
-        // const 
-        // const brnadNameLowerCase = 
-        //const query = productCollection.brand === brandName
+        
         const filter = {brand:brandName}
         const cursor = productCollection.find(filter)
         const result = await cursor.toArray()
