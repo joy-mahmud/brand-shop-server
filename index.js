@@ -105,6 +105,7 @@ async function run() {
           res.send(result)
     })
     //delete product from cart
+    //remove from the cart 
     app.delete('/deleteProduct/:id',async(req,res)=>{
         const id = req.params.id
         const filter = {_id:new ObjectId(id)}
