@@ -25,7 +25,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+   // await client.connect();
      const brand = client.db('brandShop').collection('brands')
      const productCollection = client.db('brandShop').collection('allProducts')
      const productDetailsCollection = client.db('brandShop').collection('productDetails') 
@@ -66,7 +66,9 @@ async function run() {
         const id = req.params.id 
         const query = {model_id:id}
         const result = await productDetailsCollection.findOne(query)
-        res.send(result)
+        const queryforPrice ={_id: new ObjectId(id)}
+        const result2 = await productCollection.findOne(queryforPrice)
+        res.send([result,result2])
     })
     
     //post request to add new products
@@ -113,8 +115,8 @@ async function run() {
         res.send(result)
     })
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    // await client.db("admin").command({ ping: 1 });
+    // console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
     //await client.close();
@@ -127,7 +129,7 @@ app.get('/', (req,res)=>{
 })
 
 app.listen(port,()=>{
-    console.log(`app is running on port ${port}`)
+    console.log(`roadbeast server is running on port ${port}`)
 })
 
 
